@@ -1,0 +1,10 @@
+CREATE TABLE `t_schedule_cluster` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '@cname:主键',
+  `execute` int(1) NOT NULL COMMENT '@cname:执行状态',
+  `version` int(11) NOT NULL COMMENT '@cname:版本号\r\n            ',
+  `task_name` varchar(128) NOT NULL COMMENT '@cname:任务名称\r\n            ',
+  `execute_ip` varchar(32) DEFAULT NULL COMMENT '@cname:执行ip\r\n            ',
+  `update_time` datetime DEFAULT NULL COMMENT '@cname:修改时间\r\n            ',
+  PRIMARY KEY (`id`),
+  KEY `Index_series_id` (`execute`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='@cname:多机定时任务调度';

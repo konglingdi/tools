@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ningpai.clusterTask.dao.TScheduleClusterDao">
+	<resultMap id="Base_ResultMap" type="com.ningpai.clusterTask.bean.TScheduleCluster">
+		<id column="id" property="id" jdbcType="BIGINT"/>
+		<result column="execute" property="execute" jdbcType="INTEGER"/>
+		<result column="version" property="version" jdbcType="INTEGER"/>
+		<result column="task_name" property="taskName" jdbcType="VARCHAR"/>
+		<result column="execute_ip" property="executeIp" jdbcType="VARCHAR"/>
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<sql id="Base_Column">
+		id,`execute`,version,task_name,execute_ip,update_time
+	</sql>
+
+	<!-- 根据任务名称查询一条数据-->
+	<select id="queryOneTask" resultMap="Base_ResultMap">
+		select <include refid="Base_Column"/>
+		from t_schedule_cluster
+		where task_name = #{taskName}
+	</select>
+
+	<!-- 更新任务状态为正在执行-->
+	<update id="updateOneTask" parameterType="java.util.Map">
+		update t_schedule_cluster
+		set
+			<if test="tScheduleCluster.execute != null">
+				`execute` = #{tScheduleCluster.execute},
+			</if>
+			<if test="tScheduleCluster.version != null">
+				version = #{tScheduleCluster.version},
+			</if>
+			<if test="tScheduleCluster.taskName != null and tScheduleCluster.taskName != ''">
+				task_name = #{tScheduleCluster.taskName},
+			</if>
+			<if test="tScheduleCluster.executeIp != null and tScheduleCluster.executeIp != ''">
+				execute_ip = #{tScheduleCluster.executeIp},
+			</if>
+			<if test="tScheduleCluster.updateTime != null">
+				update_time = #{tScheduleCluster.updateTime}
+			</if>
+		where
+			id = #{tScheduleCluster.id}
+		and version = #{version};
+	</update>
+
+	<update id="updateToZero" parameterType="java.lang.String">
+		update t_schedule_cluster
+		set
+			`execute` = 0
+		where
+			task_name = #{taskName}
+	</update>
+
+</mapper>
